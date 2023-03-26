@@ -5,7 +5,7 @@ let text = "HELLO TRADER";
 let priceActual = 0;
 
 
-const request = require('request');
+//const request = require('request');
 
 
 app.all('/', (req, res) => {
@@ -33,7 +33,7 @@ function exampleCallback(message) {
 
     if (message.action == '/btc') {
 
-        return 'BTC: ' + priceActual;
+        return 'BTC: 22';
     }
 
 
@@ -44,60 +44,3 @@ const exampleBot = new TelegramBot(token, exampleCallback);
 exampleBot.start();
 
 
-// let market = 'BTCUSDT';
-// let tick_interval = '5m';
-// let limit = 20;
-// let url = 'https://api.binance.com/api/v3/klines?symbol=' + market + '&interval=' + tick_interval + '&limit=' + limit;
-// request(url, { json: true }, (err, res, data) => {
-//     if (err) { return console.log(err); }
-//     let sma = 0;
-//     data.forEach(element => {
-//         let value = parseFloat(element[4]);
-//         sma += value;
-//     });
-//     sma = sma / data.length;
-//     console.log('SMA: ' + sma);
-//     console.log(getEMA(data, 9));
-//     //console.log(body.explanation);
-// });
-
-
-
-
-
-
-
-
-//cada 5seg calcula los datos
-const interval = setInterval(function () {
-    let market = 'BTCUSDT';
-    let tick_interval = '5m';
-    let limit = 20;
-    let url = 'https://api.binance.com/api/v3/klines?symbol=' + market + '&interval=' + tick_interval + '&limit=' + limit;
-    request(url, { json: true }, (err, res, data) => {
-        if (err) { return console.log(err); }
-        
-        priceActual= parseFloat(data[data.length-1][4]);
-        console.log(priceActual);
-        
-        //console.log(getEMA(data, 9));
-        //console.log(body.explanation);
-    });
-
-
-}, 5000);
-
-//clearInterval(interval);
-
-
-
-
-//calcule EMA
-function getEMA(binanceData, interval) {
-    let weight = 2 / (interval + 1);
-    let ema = parseFloat(binanceData[0][4]);
-    for (let index = 1; index < binanceData.length - 1; index++) {
-        ema = weight * parseFloat(binanceData[index][4]) + (1 - weight) * ema;
-    }
-    return ema;
-}
